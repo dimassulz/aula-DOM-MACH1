@@ -6,7 +6,74 @@ let listaDeConvidados = [
   {
     nome: "Cleyton",
     vip: true,
+    comanda: 9,
+    login: "",
+  },
+  {
+    nome: "Ernestine Benton",
+    vip: false,
     comanda: 10,
+    login: "",
+  },
+  {
+    nome: "Adrienne Dixon",
+    vip: false,
+    comanda: 11,
+    login: "",
+  },
+  {
+    nome: "Sharpe Puckett",
+    vip: false,
+    comanda: 12,
+    login: "",
+  },
+  {
+    nome: "Whitfield Vazquez",
+    vip: true,
+    comanda: 13,
+    login: "",
+  },
+  {
+    nome: "Ina Quinn",
+    vip: true,
+    comanda: 14,
+    login: "",
+  },
+  {
+    nome: "Weeks Nguyen",
+    vip: true,
+    comanda: 15,
+    login: "",
+  },
+  {
+    nome: "Bettye Crawford",
+    vip: false,
+    comanda: 16,
+    login: "",
+  },
+  {
+    nome: "Sloan Bradshaw",
+    vip: true,
+    comanda: 17,
+    login: "",
+  },
+  {
+    nome: "Bettie Wood",
+    vip: true,
+    comanda: 18,
+    login: "",
+  },
+  {
+    nome: "Victoria Tran",
+    vip: false,
+    comanda: 19,
+    login: "",
+  },
+  {
+    nome: "Diana Holder",
+    vip: false,
+    comanda: 20,
+    login: "",
   },
 ];
 
@@ -19,14 +86,17 @@ let botaoIncluirConvidado = document.getElementById("botao-incluir");
 let divMensagemUsuario = document.getElementById("mensagem-usuario");
 let checkBoxConvidadoVip = document.getElementById("convidado-vip");
 
+let selectConsultarVip = document.getElementById("consultar-vip");
+
 /* Função que insere registro a registro de usuário na lista (dentro da tabela do HTML) */
 function insereConvidadoNoHTML(convidado) {
   // Inserindo no HTML da tabela
   tabelaListaConvidados.innerHTML += `
     <tr>
         <td>${convidado.nome}</td>
-        <td>${convidado.vip ? "ESPECIAL" : "-"}</td>
+        <td>${convidado.vip ? "VIP" : "GERAL"}</td>
         <td>${convidado.comanda}</td>
+        <td>${convidado.login}</td>
         <td><button type="button" class="btn btn-danger" name='botao-remover'>
             Remover
             </button>
@@ -36,7 +106,7 @@ function insereConvidadoNoHTML(convidado) {
 }
 
 /* Usando foreach para percorrer um array */
-function exibeListaDeConvidadosV2() {
+function exibeListaDeConvidadosV2(listaDeConvidados) {
   // Limpo a tabela HTML
   tabelaListaConvidados.innerHTML = "";
   // Percorro o array inserindo cada posição em um elemento do HTML (TR) na table
@@ -69,6 +139,30 @@ function exibirMensagemUsuario(
   divMensagemUsuario.removeAttribute("hidden");
 }
 
+function gerarNumeroDaComanda() {
+  return listaDeConvidados[listaDeConvidados.length - 1].comanda + 1;
+}
+
+/*
+2 - Ao adicionar um convidado gerar um login para o convidado onde o 
+    login deve ser todo em letra minuscula e seguir o padrão. (usando map)
+    2.1 - nome-eousobrenome-numerodacomanda. Ex.: Cleyton Professor -> cleyton-professor-10
+*/
+function gerarLoginConvidados() {
+  listaDeConvidados.map((convidado) => {
+    convidado.login = `${convidado.nome.toLowerCase().replace(" ", "-")}-${
+      convidado.comanda
+    }`;
+  });
+}
+/**
+ * 
+  3 - Filtrar a lista de convidados por convidado vip, normal e todos os registros
+    3.1 - caso não tenha registros pelo filtro atribuido exibir na tabela "nenhum registro encontrado"
+ */
+function consultarVip() {}
+
+gerarLoginConvidados();
 exibeListaDeConvidadosV2(listaDeConvidados);
 
 /* Escutando o evento de click para disparar uma função quando ele acontecer */
@@ -77,21 +171,10 @@ botaoIncluirConvidado.onclick = function () {
     let convidado = {
       nome: inputNomeConvidado.value,
       vip: checkBoxConvidadoVip.checked,
-      comanda: Math.floor(Math.random() * 20),
+      comanda: gerarNumeroDaComanda(),
     };
     listaDeConvidados.push(convidado);
-
-    /* Arrow Function - Modificando o codigo da comanda */
-    listaDeConvidados.map(
-      (convidado) => (convidado.comanda += Math.floor(Math.random() * 5))
-    );
-    
-    /* 2a forma */
-    /*
-    listaDeConvidados.map(function (convidado) {
-      return (convidado.comanda += Math.floor(Math.random() * 5));
-    }); */
-
+    gerarLoginConvidados();
     exibeListaDeConvidadosV2(listaDeConvidados);
     exibirMensagemUsuario(true, "Convidado incluído na lista!");
     inputNomeConvidado.value = "";
@@ -100,3 +183,18 @@ botaoIncluirConvidado.onclick = function () {
   }
 };
 
+selectConsultarVip.addEventListener("change", () => {
+  let selecionado = selectConsultarVip.value;
+  if (selecionado) {
+    let listaFiltrada = listaDeConvidados.filter((convidado) => {
+      //(selecionado === "VIP") : boolean
+      //VIP === true
+      //GERAL === false
+      return convidado.vip === (selecionado === "VIP");
+    });
+    //let listaFiltrada = listaDeConvidados.filter(convidado => convidado.vip === (selecionado === "VIP"));
+    exibeListaDeConvidadosV2(listaFiltrada);
+  }else{
+    exibeListaDeConvidadosV2(listaDeConvidados);
+  }
+});

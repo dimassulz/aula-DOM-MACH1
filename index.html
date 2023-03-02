@@ -80,13 +80,28 @@
         id="listagem-produtos"
         class="bg-secondary text-white conteudo-secoes"
       >
-        <h2>Convidados até o momento</h2>
+      <div class="row">
+        <div class="col-8">
+          <h2>Convidados até o momento</h2>
+        </div>
+        <div class="col-4">
+          <div class="input-group">
+            <select class="form-select" id="consultar-vip">
+              <option value="" selected>TODOS</option>
+              <option>VIP</option>
+              <option>GERAL</option>
+            </select> 
+          </div>
+        </div>
+      </div>
+        
         <table class="table text-white">
           <thead>
             <tr>
               <th scope="col">Nome</th>
               <th scope="col">Lugar especial</th>
               <th scope="col">Comanda</th>
+              <th scope="col">Login</th>
               <th scope="col"></th>
             </tr>
           </thead>
