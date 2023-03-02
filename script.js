@@ -184,7 +184,7 @@ botaoIncluirConvidado.onclick = function () {
 };
 
 selectConsultarVip.addEventListener("change", () => {
-  let selecionado = selectConsultarVip.value;
+  let selecionado = selectConsultarVip.value; // "" ou VIP ou GERAL
   if (selecionado) {
     let listaFiltrada = listaDeConvidados.filter((convidado) => {
       //(selecionado === "VIP") : boolean
