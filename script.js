@@ -87,6 +87,7 @@ let divMensagemUsuario = document.getElementById("mensagem-usuario");
 let checkBoxConvidadoVip = document.getElementById("convidado-vip");
 
 let selectConsultarVip = document.getElementById("consultar-vip");
+let pesquisarConvidado = document.getElementById("botao-pesquisar"); // btn de pesquisar convidado
 
 /* Função que insere registro a registro de usuário na lista (dentro da tabela do HTML) */
 function insereConvidadoNoHTML(convidado) {
@@ -161,6 +162,8 @@ function gerarLoginConvidados() {
     3.1 - caso não tenha registros pelo filtro atribuido exibir na tabela "nenhum registro encontrado"
  */
 function consultarVip() {}
+
+pesquisarConvidado.addEventListener('click', consultarVip);
 
 gerarLoginConvidados();
 exibeListaDeConvidadosV2(listaDeConvidados);
