@@ -87,6 +87,7 @@ let divMensagemUsuario = document.getElementById("mensagem-usuario");
 let checkBoxConvidadoVip = document.getElementById("convidado-vip");
 
 let selectConsultarVip = document.getElementById("consultar-vip");
+let inputConsultarDados = document.getElementById("consultar-dados");
 
 /* Função que insere registro a registro de usuário na lista (dentro da tabela do HTML) */
 function insereConvidadoNoHTML(convidado) {
@@ -183,18 +184,28 @@ botaoIncluirConvidado.onclick = function () {
   }
 };
 
-selectConsultarVip.addEventListener("change", () => {
-  let selecionado = selectConsultarVip.value; // "" ou VIP ou GERAL
-  if (selecionado) {
-    let listaFiltrada = listaDeConvidados.filter((convidado) => {
-      //(selecionado === "VIP") : boolean
-      //VIP === true
-      //GERAL === false
-      return convidado.vip === (selecionado === "VIP");
-    });
-    //let listaFiltrada = listaDeConvidados.filter(convidado => convidado.vip === (selecionado === "VIP"));
-    exibeListaDeConvidadosV2(listaFiltrada);
-  }else{
-    exibeListaDeConvidadosV2(listaDeConvidados);
-  }
+inputConsultarDados.addEventListener('keyup',()=>{
+  let pesquisa = inputConsultarDados.value.toLowerCase().trim();
+  let listaFiltrada = listaDeConvidados.filter((convidado) => {
+    let comparacaoNome = convidado.nome.toLowerCase().startsWith(pesquisa);
+    let comparacaoComanda = convidado.comanda == pesquisa;
+    return comparacaoNome || comparacaoComanda;
+  });
+  exibeListaDeConvidadosV2(listaFiltrada);
 });
+
+// selectConsultarVip.addEventListener("change", () => {
+//   let selecionado = selectConsultarVip.value; // "" ou VIP ou GERAL
+//   if (selecionado) {
+//     let listaFiltrada = listaDeConvidados.filter((convidado) => {
+//       //(selecionado === "VIP") : boolean
+//       //VIP === true
+//       //GERAL === false
+//       return convidado.vip === (selecionado === "VIP");
+//     });
+//     //let listaFiltrada = listaDeConvidados.filter(convidado => convidado.vip === (selecionado === "VIP"));
+//     exibeListaDeConvidadosV2(listaFiltrada);
+//   }else{
+//     exibeListaDeConvidadosV2(listaDeConvidados);
+//   }
+// });
