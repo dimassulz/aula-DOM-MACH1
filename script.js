@@ -89,6 +89,9 @@ let checkBoxConvidadoVip = document.getElementById("convidado-vip");
 let selectConsultarVip = document.getElementById("consultar-vip");
 let inputConsultarDados = document.getElementById("consultar-dados");
 
+let quantidadeConvidadoVip = document.getElementById("quantidade-vip");
+let quantidadeConvidadoGeral = document.getElementById("quantidade-geral");
+
 /* Função que insere registro a registro de usuário na lista (dentro da tabela do HTML) */
 function insereConvidadoNoHTML(convidado) {
   // Inserindo no HTML da tabela
@@ -98,7 +101,7 @@ function insereConvidadoNoHTML(convidado) {
         <td>${convidado.vip ? "VIP" : "GERAL"}</td>
         <td>${convidado.comanda}</td>
         <td>${convidado.login}</td>
-        <td><button type="button" class="btn btn-danger" name='botao-remover'>
+        <td><button type="button" class="btn btn-danger" name='botao-remover' onclick="removerConvidado(${convidado.comanda})">
             Remover
             </button>
         </td>
@@ -106,12 +109,31 @@ function insereConvidadoNoHTML(convidado) {
     `;
 }
 
+const mostrarQuantidadeVip = () => {
+  let totalVip = listaDeConvidados.reduce((acumulador, convidado) => {
+    return (acumulador += convidado.vip ? 1 : 0);
+  }, 0);
+  quantidadeConvidadoVip.innerHTML = `${totalVip}`;
+  quantidadeConvidadoGeral.innerHTML = `${listaDeConvidados.length - totalVip}`;
+};
+
 /* Usando foreach para percorrer um array */
 function exibeListaDeConvidadosV2(listaDeConvidados) {
   // Limpo a tabela HTML
   tabelaListaConvidados.innerHTML = "";
   // Percorro o array inserindo cada posição em um elemento do HTML (TR) na table
   listaDeConvidados.forEach((convidado) => insereConvidadoNoHTML(convidado));
+  mostrarQuantidadeVip();
+}
+
+function removerConvidado(numeroComanda){
+  listaDeConvidados.filter((convidado, indice) => {
+    if(convidado.comanda == numeroComanda){
+      listaDeConvidados.splice(indice,1);
+    }
+  });
+  exibirMensagemUsuario(true, "Convidado removido com sucesso!");
+  exibeListaDeConvidadosV2(listaDeConvidados);
 }
 
 /* Setando um atributo para esconder*/
@@ -141,7 +163,10 @@ function exibirMensagemUsuario(
 }
 
 function gerarNumeroDaComanda() {
-  return listaDeConvidados[listaDeConvidados.length - 1].comanda + 1;
+  if(listaDeConvidados.length > 0){
+    return listaDeConvidados[listaDeConvidados.length - 1].comanda + 1;
+  }
+  return 1;
 }
 
 /*
@@ -161,7 +186,6 @@ function gerarLoginConvidados() {
   3 - Filtrar a lista de convidados por convidado vip, normal e todos os registros
     3.1 - caso não tenha registros pelo filtro atribuido exibir na tabela "nenhum registro encontrado"
  */
-function consultarVip() {}
 
 gerarLoginConvidados();
 exibeListaDeConvidadosV2(listaDeConvidados);
@@ -184,7 +208,7 @@ botaoIncluirConvidado.onclick = function () {
   }
 };
 
-inputConsultarDados.addEventListener('keyup',()=>{
+inputConsultarDados.addEventListener("keyup", () => {
   let pesquisa = inputConsultarDados.value.toLowerCase().trim();
   let listaFiltrada = listaDeConvidados.filter((convidado) => {
     let comparacaoNome = convidado.nome.toLowerCase().startsWith(pesquisa);
