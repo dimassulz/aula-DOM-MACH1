@@ -2,80 +2,9 @@
 lidar com objetos chamada de foreach */
 
 /* Inicializando lista de convidados com dois convidados */
-let listaDeConvidados = [
-  {
-    nome: "Cleyton",
-    vip: true,
-    comanda: 9,
-    login: "",
-  },
-  {
-    nome: "Ernestine Benton",
-    vip: false,
-    comanda: 10,
-    login: "",
-  },
-  {
-    nome: "Adrienne Dixon",
-    vip: false,
-    comanda: 11,
-    login: "",
-  },
-  {
-    nome: "Sharpe Puckett",
-    vip: false,
-    comanda: 12,
-    login: "",
-  },
-  {
-    nome: "Whitfield Vazquez",
-    vip: true,
-    comanda: 13,
-    login: "",
-  },
-  {
-    nome: "Ina Quinn",
-    vip: true,
-    comanda: 14,
-    login: "",
-  },
-  {
-    nome: "Weeks Nguyen",
-    vip: true,
-    comanda: 15,
-    login: "",
-  },
-  {
-    nome: "Bettye Crawford",
-    vip: false,
-    comanda: 16,
-    login: "",
-  },
-  {
-    nome: "Sloan Bradshaw",
-    vip: true,
-    comanda: 17,
-    login: "",
-  },
-  {
-    nome: "Bettie Wood",
-    vip: true,
-    comanda: 18,
-    login: "",
-  },
-  {
-    nome: "Victoria Tran",
-    vip: false,
-    comanda: 19,
-    login: "",
-  },
-  {
-    nome: "Diana Holder",
-    vip: false,
-    comanda: 20,
-    login: "",
-  },
-];
+let listaDeConvidadosLocalStorage = JSON.parse(localStorage.getItem('listaDeConvidados'));
+//let listaDeConvidados = listaDeConvidadosLocalStorage ? listaDeConvidadosLocalStorage : []; /if ternario
+let listaDeConvidados = listaDeConvidadosLocalStorage ?? [];//operador de coalescencia
 
 /* Identificando IDS que serão manipulados na tela */
 let tabelaListaConvidados = document.getElementById("lista-convidados");
@@ -132,6 +61,7 @@ function removerConvidado(numeroComanda){
       listaDeConvidados.splice(indice,1);
     }
   });
+  atualizarListaLocalStorage();
   exibirMensagemUsuario(true, "Convidado removido com sucesso!");
   exibeListaDeConvidadosV2(listaDeConvidados);
 }
@@ -139,6 +69,10 @@ function removerConvidado(numeroComanda){
 /* Setando um atributo para esconder*/
 function fechaDivMensagemUsuario() {
   divMensagemUsuario.setAttribute("hidden", "");
+}
+
+function atualizarListaLocalStorage(){
+  localStorage.setItem('listaDeConvidados', JSON.stringify(listaDeConvidados));
 }
 
 // Exibir uma mensagem de resposta ao usuário quando ele clicar no botao incluir
@@ -181,12 +115,12 @@ function gerarLoginConvidados() {
     }`;
   });
 }
+
 /**
  * 
   3 - Filtrar a lista de convidados por convidado vip, normal e todos os registros
     3.1 - caso não tenha registros pelo filtro atribuido exibir na tabela "nenhum registro encontrado"
  */
-
 gerarLoginConvidados();
 exibeListaDeConvidadosV2(listaDeConvidados);
 
@@ -200,6 +134,7 @@ botaoIncluirConvidado.onclick = function () {
     };
     listaDeConvidados.push(convidado);
     gerarLoginConvidados();
+    atualizarListaLocalStorage();
     exibeListaDeConvidadosV2(listaDeConvidados);
     exibirMensagemUsuario(true, "Convidado incluído na lista!");
     inputNomeConvidado.value = "";
